@@ -16,3 +16,19 @@ CREATE OR REPLACE FUNCTION get_default_owner() RETURNS "user" AS $$
 		
 	END
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION fix_activities_without_owner() RETURNS SETOF activity AS $$
+
+	DECLARE
+		userObj "user"%rowtype;
+	BEGIN
+		userObj := get_default_owner();
+		
+		RETURN QUERY UPDATE activity
+		             SET owner_id = userObj.id
+		             WHERE owner_id IS NULL
+		             RETURNING *;
+		
+	END;
+
+$$ LANGUAGE plpgsql;
