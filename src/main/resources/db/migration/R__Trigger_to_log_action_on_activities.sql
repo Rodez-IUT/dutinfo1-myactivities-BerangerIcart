@@ -6,13 +6,15 @@ CREATE OR REPLACE FUNCTION audit_actionLog() RETURNS trigger AS $$
 		id := OLD.id;
 			
 		INSERT INTO action_log (id, action_name, entity_name, entity_id, author)
-		VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, id, 'postgres');
+		VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, id, current_user);
 		
 		RETURN NULL;
 	
 	END;
 
 $$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS action_log_stamp ON activity;
 
 CREATE TRIGGER action_log_stamp
 	AFTER DELETE ON activity
