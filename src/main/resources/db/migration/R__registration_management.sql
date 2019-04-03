@@ -63,17 +63,16 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION audit_registration() RETURNS trigger AS $$
 	DECLARE
-		id bigint;
+		id2 bigint;
 	BEGIN
 		IF (TG_OP = 'INSERT') THEN
-			INSERT INTO action_log (id, action_name, entity_name, entity_id, author)
-			VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, NEW.id, current_user);
-			RETURN NEW;
+			id2 = NEW.id;
 		ELSEIF (TG_OP = 'DELETE') THEN
-			INSERT INTO action_log (id, action_name, entity_name, entity_id, author)
-			VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, OLD.id, current_user);
-			RETURN OLD;
+			id2 = OLD.id;
 		END IF;
+		
+		INSERT INTO action_log (id, action_name, entity_name, entity_id, author, action_date)
+		VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, id2, current_user, now());
 		
 		RETURN NULL;
 	END;
