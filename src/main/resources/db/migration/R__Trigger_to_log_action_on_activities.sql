@@ -3,7 +3,12 @@ CREATE OR REPLACE FUNCTION audit_actionLog() RETURNS trigger AS $$
 		id bigint;
 	BEGIN
 	
-		id := OLD.id;
+		/* id := OLD.id; */
+		IF OLD.id IS NOT NULL THEN
+			id := OLD.id;
+		ELSE
+			id := NEW.id;
+		END IF;
 			
 		INSERT INTO action_log (id, action_name, entity_name, entity_id, author)
 		VALUES (nextval('id_generator'), LOWER(TG_OP), TG_RELNAME, id, current_user);
