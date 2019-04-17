@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION get_default_owner() RETURNS "user" AS $$
 			RETURN userObj;
 		END IF;
 		
-		INSERT INTO "user" (id, username) VALUES (1, 'Default Owner');
+		INSERT INTO "user" (id, username) VALUES (nextval('id_generator'), 'Default Owner');
 		SELECT * INTO userObj FROM "user" WHERE username = 'Default Owner';
 		RETURN userObj;
 		
