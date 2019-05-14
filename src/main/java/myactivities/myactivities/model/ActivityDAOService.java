@@ -32,7 +32,22 @@ public interface ActivityDAOService {
     @Options(statementType = StatementType.CALLABLE)
     public void findAllActivitiesWithProcedureCall(Map<String,List<Activity>> parameters);
 
-    
+//    @Insert(value= "{CALL find_all_activities(#{result,mode=OUT, jdbcType=CURSOR})}")
+//    @Options(statementType = StatementType.CALLABLE)
+//    @ResultType(Activity.class)
+//    @Results(
+//    {   
+//     @Result(property="id", column="id"),
+//     @Result(property="title", column="title"),
+//     @Result(property="description", column="description"),
+//     @Result(property="creation_date", column="creation_date"),
+//     @Result(property="modification_date", column="modification_date"),
+//     @Result(property="owner_id", column="owner_id"),
+//    })
+    @Select(value = "SELECT activity.id, activity.title, \"user\".username" + 
+	        "\r\nFROM activity" + 
+	        "\r\nLEFT JOIN \"user\" ON \"user\".id = activity.owner_id" + 
+	        "\r\nORDER BY title ASC, \"user\".username ASC")
+    @ResultMap("activity")
     public List<Activity> findAllActivities();
-    
 }
