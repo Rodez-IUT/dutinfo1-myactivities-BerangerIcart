@@ -50,4 +50,9 @@ public interface ActivityDAOService {
 	        "\r\nORDER BY title ASC, \"user\".username ASC")
     @ResultMap("activity")
     public List<Activity> findAllActivities();
+    
+    @Select(value= "{CALL fix_activities_without_owner()}")
+    @Options(statementType = StatementType.CALLABLE)
+    @ResultMap("activity")
+    public void fixActivities();
 }
