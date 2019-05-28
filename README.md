@@ -13,3 +13,16 @@ Etape8:
 		- dans le modèle ActivityDAOService , appeler cette fonction
 	- Afficher la page d'activité rafraîchie
 		- dans ActivityController, return "index" pour rafraîchir la page index, et ne pas aller sur la page ./fixActivities
+		
+		
+Etape9:
+	- Créer un rôle avec un mot de passe:
+		CREATE ROLE myactivities WITH LOGIN PASSWORD 'm7@ct1v1t135'
+		
+	- Rôle devient propriétaire de la base de données
+		. Autoriser la connexion à la base de données
+			GRANT CONNECT ON DATABASE "myactivities-test" TO myactivities
+		. Donner tous les privilèges sur toutes les tables
+			GRANT ALL ON ALL TABLES IN SCHEMA public TO myactivities
+		. Et sur toutes les séquences
+			GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO myactivities
