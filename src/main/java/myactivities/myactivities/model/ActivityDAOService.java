@@ -54,5 +54,5 @@ public interface ActivityDAOService {
     @Select(value= "{CALL fix_activities_without_owner()}")
     @Options(statementType = StatementType.CALLABLE)
     @ResultMap("activity")
-    public void fixActivities();
+    public List<Activity> fixActivities();
 }
